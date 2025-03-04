@@ -56,8 +56,9 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto animate-fade-in">
-      <Card className="glassmorphism shadow-elevation">
+    <div className="w-full max-w-4xl mx-auto animate-fade-in-up opacity-0">
+      <Card className="glassmorphism shadow-lg overflow-hidden">
+        <div className="h-2 bg-pastel-gradient-2"></div>
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -69,7 +70,7 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 hover:bg-secondary/80"
               onClick={handleBackToHome}
             >
               <ArrowLeft className="w-4 h-4" />
@@ -78,10 +79,10 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <Card className="shadow-subtle p-4 bg-background/50">
+            <Card className="shadow-md p-4 bg-background/50 border-accent/20 hover:shadow-lg transition-shadow animate-fade-in-up opacity-0 stagger-1">
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full">
-                  <FileText className="w-5 h-5 text-primary" />
+                <div className="bg-accent/20 p-2 rounded-full">
+                  <FileText className="w-5 h-5 text-accent-foreground" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Total Files</p>
@@ -90,9 +91,9 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
               </div>
             </Card>
             
-            <Card className="shadow-subtle p-4 bg-background/50">
+            <Card className="shadow-md p-4 bg-background/50 border-primary/20 hover:shadow-lg transition-shadow animate-fade-in-up opacity-0 stagger-2">
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full">
+                <div className="bg-primary/20 p-2 rounded-full">
                   <File className="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -102,9 +103,9 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
               </div>
             </Card>
             
-            <Card className="shadow-subtle p-4 bg-background/50">
+            <Card className="shadow-md p-4 bg-background/50 border-primary/20 hover:shadow-lg transition-shadow animate-fade-in-up opacity-0 stagger-3">
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full">
+                <div className="bg-primary/20 p-2 rounded-full">
                   <Clock className="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -121,15 +122,15 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
             <h3 className="text-lg font-medium">Generated Output File</h3>
             
             {isGenerating ? (
-              <div className="h-60 bg-muted/40 rounded-md flex items-center justify-center">
-                <div className="flex flex-col items-center space-y-4">
+              <div className="h-60 bg-secondary/40 rounded-md flex items-center justify-center">
+                <div className="flex flex-col items-center space-y-4 animate-pulse-soft">
                   <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   <p className="text-muted-foreground">Generating output file...</p>
                 </div>
               </div>
             ) : (
-              <div className="relative">
-                <div className="h-60 bg-muted/40 p-4 rounded-md overflow-auto">
+              <div className="relative animate-fade-in-up">
+                <div className="h-60 bg-secondary/40 p-4 rounded-md overflow-auto">
                   <pre className="text-xs whitespace-pre-wrap font-mono opacity-80">
                     {generatedText.slice(0, 2000)}
                     {generatedText.length > 2000 && '...'}
@@ -139,7 +140,7 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
                   <Button
                     size="sm" 
                     variant="secondary"
-                    className="opacity-90 hover:opacity-100"
+                    className="opacity-90 hover:opacity-100 transition-opacity shadow-sm"
                     onClick={handleCopyToClipboard}
                   >
                     {isCopied ? (
@@ -158,14 +159,14 @@ const DirectoryProcessor: React.FC<DirectoryProcessorProps> = ({ result }) => {
             <Button
               variant="outline"
               onClick={handleBackToHome}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 hover:bg-secondary/80 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home
             </Button>
             <Button
               onClick={handleDownload}
-              className="flex items-center gap-2 shadow-subtle"
+              className="flex items-center gap-2 shadow-md hover:shadow-lg transition-all animate-pulse-soft"
               disabled={isGenerating}
             >
               <Download className="w-4 h-4" />
