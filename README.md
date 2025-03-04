@@ -2,7 +2,6 @@
 # Textify Navigator
 
 <div align="center">
-  <img src="public/og-image.png" alt="Textify Navigator" width="300" />
   <h3>Extract text from all files in your codebase for easy reference and sharing</h3>
 </div>
 
