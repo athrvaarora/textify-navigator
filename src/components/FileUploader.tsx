@@ -13,6 +13,14 @@ interface FileUploaderProps {
   onProcessingComplete: (result: ProcessingResult) => void;
 }
 
+// Create a type definition for the webkitdirectory attribute
+declare module 'react' {
+  interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
+    webkitdirectory?: string | boolean;
+    directory?: string | boolean;
+  }
+}
+
 const FileUploader: React.FC<FileUploaderProps> = ({ onProcessingComplete }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -113,18 +121,21 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onProcessingComplete }) => 
     if (e.target.files && e.target.files.length > 0) {
       // Convert FileList to DataTransferItemList-like structure
       const dataTransferItems = e.target.files;
-      const items: DataTransferItemList = {
+      
+      // Create a proper DataTransferItemList with required methods
+      const items = {
         length: dataTransferItems.length,
         [Symbol.iterator]: function* () {
           for (let i = 0; i < this.length; i++) {
             yield this[i];
           }
         }
-      } as any;
+      } as DataTransferItemList;
 
       for (let i = 0; i < dataTransferItems.length; i++) {
         const file = dataTransferItems[i];
-        items[i] = {
+        // Cast to unknown first and then to DataTransferItem to satisfy TypeScript
+        (items[i] as unknown) = {
           kind: 'file',
           type: file.type,
           getAsFile: () => file,
@@ -137,6 +148,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onProcessingComplete }) => 
                 callback(file);
               }
             } as FileSystemFileEntry;
+          },
+          // Add the required getAsString method to satisfy the DataTransferItem interface
+          getAsString: (callback: FunctionStringCallback) => {
+            callback(file.name);
           }
         } as DataTransferItem;
       }
@@ -220,6 +235,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onProcessingComplete }) => 
           onChange={handleChange}
           multiple
           webkitdirectory=""
+          directory=""
         />
       </Card>
     </div>
