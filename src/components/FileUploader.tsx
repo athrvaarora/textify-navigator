@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -75,7 +74,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onProcessingComplete }) => 
       setProgress(100);
       
       if (result.entries.length === 0) {
-        toast.warning('No text files found to process');
+        toast.warning('No text or code files were found to process. Please check your directory contains text-based files.');
         setIsProcessing(false);
         return;
       }

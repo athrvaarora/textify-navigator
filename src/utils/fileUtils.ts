@@ -1,4 +1,3 @@
-
 /**
  * Utility functions for handling file operations
  */
@@ -16,7 +15,7 @@ export const TEXT_FILE_TYPES = [
   'text/plain', 'text/html', 'text/css', 'text/javascript', 
   'application/javascript', 'application/json', 'application/xml',
   'text/markdown', 'text/x-python', 'text/x-java', 'text/x-c',
-  'text/x-c++', 'text/x-typescript',
+  'text/x-c++', 'text/x-typescript', 'application/x-httpd-php',
   
   // Document formats
   'text/csv', 'text/tab-separated-values',
@@ -37,9 +36,17 @@ export const TEXT_FILE_EXTENSIONS = [
   
   // Config files
   '.env', '.gitignore', '.eslintrc', '.prettierrc', '.babelrc', '.editorconfig',
+  '.dockerignore', '.htaccess', '.ini', '.conf', '.cfg', '.toml',
   
   // Document files
   '.csv', '.tsv', '.log',
+  
+  // Additional code file types
+  '.vue', '.svelte', '.jsx', '.dart', '.lua', '.r', '.perl', '.m', '.h',
+  '.jsp', '.aspx', '.erb', '.haml', '.slim', '.pug', '.jade', '.ex', '.exs',
+  '.hbs', '.twig', '.razor', '.elm', '.clj', '.scala', '.groovy',
+  '.tf', '.nix', '.cmake', '.make', '.asm', '.s', '.bat', '.cmd',
+  '.proto', '.sol', '.hs', '.erl', '.fs', '.fsx',
 ];
 
 /**
@@ -52,7 +59,6 @@ export const EXCLUDED_FILE_TYPES = [
   'application/pdf', 'application/msword',
   'application/vnd.openxmlformats-officedocument',
   'application/vnd.ms-excel', 'application/vnd.ms-powerpoint',
-  'application/octet-stream',
 ];
 
 /**
@@ -76,7 +82,8 @@ export const isTextFile = (file: File): boolean => {
   }
   
   // For files without a recognized MIME type, try to determine by extension
-  return !file.type || file.type === 'application/octet-stream';
+  // Most code files will fall here since browsers often don't recognize specific code file types
+  return true; // Default to accepting files that aren't explicitly excluded
 };
 
 /**

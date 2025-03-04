@@ -37,82 +37,124 @@ export const processDirectoryFiles = async (
   
   const errors: ProcessingError[] = [];
   
-  // Process entries recursively
-  const processEntry = async (entry: FileSystemEntry, path: string = '') => {
-    if (entry.isFile) {
-      const fileEntry = entry as FileSystemFileEntry;
+  // Create a function to process files and return a promise
+  const processFile = (file: File, filePath: string): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      result.totalFiles++;
+      result.totalSize += file.size;
       
-      fileEntry.file(async (file) => {
-        result.totalFiles++;
-        result.totalSize += file.size;
-        
-        // Skip files that are too large or not text-based
-        if (file.size > MAX_FILE_SIZE) {
-          result.skippedFiles++;
-          errors.push({
-            file: `${path}/${file.name}`,
-            error: 'File exceeds maximum size limit',
-          });
-          return;
-        }
-        
-        if (!isTextFile(file)) {
-          result.skippedFiles++;
-          return;
-        }
-        
-        try {
-          const content = await readFileAsText(file);
+      // Skip files that are too large
+      if (file.size > MAX_FILE_SIZE) {
+        result.skippedFiles++;
+        errors.push({
+          file: filePath,
+          error: 'File exceeds maximum size limit',
+        });
+        resolve();
+        return;
+      }
+      
+      // Check if it's a text file we can process
+      if (!isTextFile(file)) {
+        result.skippedFiles++;
+        resolve();
+        return;
+      }
+      
+      // Read the file content
+      readFileAsText(file)
+        .then((content) => {
           result.entries.push({
-            path: formatFilePath(`${path}/${file.name}`),
+            path: formatFilePath(filePath),
             content,
             size: file.size,
             type: file.type || 'text/plain', // Default to text/plain if no type
           });
           result.processedFiles++;
-        } catch (error) {
+          resolve();
+        })
+        .catch((error) => {
           result.skippedFiles++;
           errors.push({
-            file: `${path}/${file.name}`,
+            file: filePath,
             error: (error as Error).message || 'Unknown error',
           });
-        }
-      });
-    } else if (entry.isDirectory) {
-      const dirEntry = entry as FileSystemDirectoryEntry;
-      const dirReader = dirEntry.createReader();
-      
-      // Read all entries in the directory
-      const readEntries = (): Promise<FileSystemEntry[]> => {
-        return new Promise((resolve, reject) => {
-          dirReader.readEntries(
-            (entries) => {
-              if (entries.length === 0) {
-                resolve([]);
-              } else {
-                readEntries().then((nextEntries) => {
-                  resolve([...entries, ...nextEntries]);
-                });
-              }
-            },
-            (error) => {
-              reject(error);
-            }
-          );
+          resolve();
         });
-      };
-      
-      const entries = await readEntries();
-      const newPath = path ? `${path}/${entry.name}` : entry.name;
-      
-      for (const entry of entries) {
-        await processEntry(entry, newPath);
-      }
-    }
+    });
   };
   
-  // Process all entries concurrently
-  await Promise.all(items.map((entry) => processEntry(entry)));
+  // Create a function to recursively traverse directories and return a promise
+  const processEntry = async (entry: FileSystemEntry, path: string = ''): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+      if (entry.isFile) {
+        const fileEntry = entry as FileSystemFileEntry;
+        
+        fileEntry.file((file) => {
+          const filePath = `${path}/${file.name}`;
+          processFile(file, filePath)
+            .then(() => resolve())
+            .catch((err) => {
+              console.error(`Error processing file ${filePath}:`, err);
+              resolve(); // Resolve anyway to continue with other files
+            });
+        }, (error) => {
+          console.error(`Error getting file for ${entry.name}:`, error);
+          resolve(); // Resolve anyway to continue with other files
+        });
+      } else if (entry.isDirectory) {
+        const dirEntry = entry as FileSystemDirectoryEntry;
+        const dirReader = dirEntry.createReader();
+        const newPath = path ? `${path}/${entry.name}` : entry.name;
+        
+        // Function to read all entries in the directory
+        const readAllEntries = (): Promise<FileSystemEntry[]> => {
+          return new Promise((resolveRead, rejectRead) => {
+            const entries: FileSystemEntry[] = [];
+            
+            // Recursive function to read entries in batches
+            function readEntries() {
+              dirReader.readEntries((results) => {
+                if (results.length) {
+                  entries.push(...results);
+                  readEntries(); // Continue reading if more entries
+                } else {
+                  resolveRead(entries); // No more entries, resolve with all entries
+                }
+              }, rejectRead);
+            }
+            
+            readEntries(); // Start reading
+          });
+        };
+        
+        // Process all entries in the directory
+        readAllEntries()
+          .then(async (entries) => {
+            // Process each entry sequentially to avoid too many concurrent operations
+            for (const childEntry of entries) {
+              await processEntry(childEntry, newPath);
+            }
+            resolve();
+          })
+          .catch((error) => {
+            console.error(`Error reading directory ${newPath}:`, error);
+            resolve(); // Resolve anyway to continue with other files
+          });
+      } else {
+        // Not a file or directory, just resolve
+        resolve();
+      }
+    });
+  };
+  
+  // Process all top-level entries sequentially
+  for (const entry of items) {
+    await processEntry(entry);
+  }
+  
+  console.log(`Processed ${result.processedFiles} files, skipped ${result.skippedFiles} files`);
+  console.log(`Found ${result.entries.length} text entries`);
   
   return result;
 };
