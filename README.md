@@ -1,69 +1,137 @@
-# Welcome to your Lovable project
 
-## Project info
+# Textify Navigator
 
-**URL**: https://lovable.dev/projects/a523766e-0cef-446e-a8b8-75ffed484607
+<div align="center">
+  <img src="public/og-image.png" alt="Textify Navigator" width="300" />
+  <h3>Extract text from all files in your codebase for easy reference and sharing</h3>
+</div>
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+Textify Navigator is a web application that processes directories and extracts text content from code and text files. It creates a single text file containing all code with file paths, making it perfect for sharing codebases with Language Models (LLMs) like ChatGPT, Claude, or Gemini.
 
-**Use Lovable**
+## 🚀 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a523766e-0cef-446e-a8b8-75ffed484607) and start prompting.
+- **Directory Processing**: Uploads and navigates through entire directory structures
+- **Nested Folder Support**: Traverses and processes nested directories automatically
+- **Code File Extraction**: Extracts code from various programming languages and file formats
+- **Clean Output Format**: Organizes extracted text by file paths for clear context
+- **Browser-Based**: Works entirely in the browser with no server dependencies
+- **Large File Support**: Handles files up to 20MB in size
+- **Fast Processing**: Efficiently processes even large codebases
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Supported File Types
 
-**Use your preferred IDE**
+Textify Navigator supports a wide range of file types, including:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Programming Languages
+- JavaScript/TypeScript (.js, .jsx, .ts, .tsx)
+- Python (.py)
+- Java (.java)
+- C/C++ (.c, .cpp, .h)
+- Ruby (.rb)
+- Go (.go)
+- PHP (.php)
+- Rust (.rs)
+- Swift (.swift)
+- Kotlin (.kt)
+- And many more...
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Configuration & Markup
+- JSON (.json)
+- YAML (.yml, .yaml)
+- XML (.xml)
+- HTML (.html, .htm)
+- CSS/SCSS/SASS (.css, .scss, .sass)
+- Markdown (.md)
 
-Follow these steps:
+### Other Text Formats
+- Plain text (.txt)
+- CSV (.csv)
+- Configuration files (.env, .config, etc.)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🔍 Use Cases
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- **AI Code Assistance**: Share your codebase with LLMs for context-aware assistance
+- **Code Reviews**: Quickly create a browsable text version of your project
+- **Documentation**: Generate a comprehensive view of your codebase
+- **Knowledge Sharing**: Share code structure with team members or clients
+- **Backup**: Create searchable text backups of your code projects
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🚀 Getting Started
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/textify-navigator.git
+   cd textify-navigator
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+### Building for Production
+
+To create a production build:
+
+```bash
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+The built files will be in the `dist` directory and can be deployed to any static hosting service.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📖 How to Use
 
-**Use GitHub Codespaces**
+1. **Open the Application**: Access Textify Navigator in your browser
+2. **Upload Your Directory**: 
+   - Click "Select Directory" to choose a folder
+   - Or drag and drop a folder onto the upload area
+3. **Wait for Processing**: The application will scan all files and extract text content
+4. **Review Results**: See a summary of processed files and preview the output
+5. **Download Output**: Click "Download File" to save the compiled text document
+6. **Use with AI Tools**: Copy the content or upload the file to your favorite LLM
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## ⚙️ Technical Details
 
-## What technologies are used for this project?
+Textify Navigator is built with:
 
-This project is built with .
+- React + TypeScript
+- Vite for fast development and building
+- Tailwind CSS for styling
+- shadcn/ui for component library
+- File System Access API for directory traversal
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🤝 Contributing
 
-## How can I deploy this project?
+Contributions are welcome! To contribute:
 
-Simply open [Lovable](https://lovable.dev/projects/a523766e-0cef-446e-a8b8-75ffed484607) and click on Share -> Publish.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-## I want to use a custom domain - is that possible?
+## 📄 License
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- The shadcn/ui team for their excellent component library
+- The React and Vite teams for their amazing tools
+
+---
+
+<div align="center">
+  <p>Made with ❤️ for developers and AI enthusiasts</p>
+</div>
